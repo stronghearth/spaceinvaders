@@ -56,9 +56,10 @@ document.addEventListener('DOMContentLoaded', () => {
             alienInvaders[i] += direction
         }
         for (let i=0; i<= alienInvaders.length-1; i++) {
+            if (!alienInvadersTakenDown.includes(i)) {
             squares[alienInvaders[i]].classList.add('invader')
+            }
         }
-    }
 
     //decide if game is over
     if(squares[currentShooterIndex].classList.contains('invader', 'shooter')){
@@ -73,8 +74,15 @@ document.addEventListener('DOMContentLoaded', () => {
             clearInterval(invaderId)
         }
     }
+    
+    //decide a victory
+    if(alienInvadersTakenDown.length === alienInvaders.length){
+        resultDisplay.textContent = "VICTORY"
+        clearInterval(invaderId)
+    }
+}
     invaderId = setInterval(moveInvaders, 500)
-
+    
     //shoot at ze aliens!
     function shoot(e) {
         let laserId
@@ -84,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
             squares[currentLaserIndex].classList.remove('laser')
             currentLaserIndex -= width
             squares[currentLaserIndex].classList.add('laser')
-            if(squares[currentLaserIndex].contains('invader')) {
+            if(squares[currentLaserIndex].classList.contains('invader')) {
                 squares[currentLaserIndex].classList.remove('laser')
                 squares[currentLaserIndex].classList.remove('invader')
                 squares[currentLaserIndex].classList.add('boom')
@@ -104,11 +112,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        document.addEventListener('keyup', e => {
-            if (e.keyCode === 32) {
+        // document.addEventListener('keyup', e => {
+        //     if (e.keyCode === 32) {
+        //         laserId = setInterval(moveLaser, 100)
+        //     }
+        // })
+
+        switch(e.keyCode) {
+            case 32:
                 laserId = setInterval(moveLaser, 100)
-            }
-        })
+            break
+        }
     }
 
     document.addEventListener('keyup', shoot)
