@@ -28,15 +28,41 @@ document.addEventListener('DOMContentLoaded', () => {
         squares[currentShooterIndex].classList.remove('shooter')
         switch(e.keyCode){
             case 37:
-                if(currentShooterIndex % width !== 0) currentShooterIndex-=1
+                if(currentShooterIndex % width !== 0) currentShooterIndex -=1
                 break
             case 39:
-                if(currentShooterIndex % width < width -1) currentShooterIndex+=1
+                if(currentShooterIndex % width < width -1) currentShooterIndex +=1
                 break
         }
         squares[currentShooterIndex].classList.add('shooter')
     }
     document.addEventListener('keydown', moveShooter)
 
-    
+    //move the invaders
+    function moveInvaders() {
+        const leftEdge = alienInvaders[0] % width === 0
+        const rightEdge = alienInvaders[alienInvaders.length -1] % width === width -1
+
+        if((leftEdge && direction === -1) || (rightEdge && direction === 1)) {
+            direction = width
+        } else if (direction === width) {
+            if(leftEdge) direction = 1
+            else direction = -1
+        }
+        for (let i=0; i<= alienInvaders.length-1; i++) {
+            squares[alienInvaders[i]].classList.remove('invader')
+        }
+        for (let i=0; i<= alienInvaders.length-1; i++) {
+            alienInvaders[i] += direction
+        }
+        for (let i=0; i<= alienInvaders.length-1; i++) {
+            squares[alienInvaders[i]].classList.add('invader')
+        }
+    }
+
+    //decide if game is over
+    if(squares[currentShooterIndex].classList.contains('invader', 'shooter')){
+        resultDisplay.textContent = 'Game Over'
+        squares[currentShooterIndex].classList.add('boom')
+    }
 })
