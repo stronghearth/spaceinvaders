@@ -64,5 +64,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if(squares[currentShooterIndex].classList.contains('invader', 'shooter')){
         resultDisplay.textContent = 'Game Over'
         squares[currentShooterIndex].classList.add('boom')
+        clearInterval(invaderId)
     }
+
+    for(let i=0; i<=alienInvaders.length-1; i++) {
+        if(alienInvaders[i]>(squares.length - (width-1))) {
+            resultDisplay.textContent = 'Game Over'
+            clearInterval(invaderId)
+        }
+    }
+    invaderId = setInterval(moveInvaders, 500)
 })
